@@ -8,6 +8,8 @@ export default class DashboardScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Text>DashboardScreen</Text>
+        <Button title="Sign out" onPress={() => firebase.auth().signOut()}/>
       </View>
     );
   }
