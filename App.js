@@ -1,6 +1,17 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, Image} from 'react-native';
 import firebase from 'firebase';
+import StyleFirebaseAuth from 'firebaseui/StyledFirebaseAuth';
+
+firebase.initializeApp({
+  apiKey: "AIzaSyCMG92fTz1JOMkt-i1A-caJlAQHj5zAL3w",
+  authDomain: "practice-690dd.firebaseapp.com",
+  databaseURL: "https://practice-690dd.firebaseio.com",
+  projectId: "practice-690dd",
+  storageBucket: "",
+  messagingSenderId: "634917161579",
+  appId: "1:634917161579:web:93f62e0634d54500"
+})
 
 
 export default class App extends Component {
@@ -18,7 +29,7 @@ export default class App extends Component {
   }
 
   componentDidMount = () => {
-    firebase.auth().onAuthStateChange(user => {
+    firebase.auth().onAuthStateChanged(user => {
       this.setState({isSignedIn: !!user})
     })
   }
@@ -27,7 +38,9 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         {this.state.isSignedIn ?
-        <Text> Signed In</Text>
+        <StyleFirebaseAuth
+          uiConfig={this.uiConfig}
+          firebaseAuth = {firebase.auth()}/>
         :
         <Text>Not Signed In</Text>}
       </View>
