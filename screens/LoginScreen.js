@@ -4,6 +4,14 @@ import firebase from 'firebase';
 import Expo from 'expo';
 
 export default class LoginScreen extends Component {
+  componentDidMount(){
+    firebase.auth().onAuthStateChanged((user) => {
+      if(user != null){
+        console.log(user)
+      }
+    }
+  )
+}
   isUserEqual = (googleUser, firebaseUser) => {
     if (firebaseUser) {
       var providerData = firebaseUser.providerData;
@@ -104,12 +112,27 @@ export default class LoginScreen extends Component {
     }
   }
 
+  signInWithFacebookAsync = async () => {
+    //app id 미기입
+    const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync('AppID', { permissions: ['public_profile'] })
+    if (type == 'success'){
+      const credential = firebase.auth.FacebookAuthProvider.credential(token)
+      firebase.auth().signInWithCredential(credential).catch((error) => {
+        consle.log(error)
+      })
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Button
-          title = "Sign In WIth Google"
+          title = "Sign In With Google"
           onpress = {() => this.signInWithGoogleAsync()}
+        />
+        <Button
+          title = "Sign In With Facebook"
+          onpress = {() => this.signInWithFacebookAsync()}
         />
       </View>
     );
