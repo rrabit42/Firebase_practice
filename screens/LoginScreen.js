@@ -5,12 +5,31 @@ import firebase from 'firebase';
 import Expo from 'expo';
 
 export default class LoginScreen extends Component { 
+    signInWithGoogleAsync = async () => {
+      try {
+        const result = await Expo.Google.logInAsync({
+          behavior: 'web',
+          androidClientId: YOUR_CLIENT_ID_HERE,
+          //iosClientId: YOUR_CLIENT_ID_HERE,
+          scopes: ['profile', 'email'],
+        });
+
+        if (result.type === 'success') {
+          return result.accessToken;
+        } else {
+          return { cancelled: true };
+        }
+      } catch (e) {
+        return { error: true };
+      }
+    }
+
   render() {
     return (
       <View style={styles.container}>
         <Button
           title = "Sign In WIth Google"
-          onpress = {() => alert('button pressed')}
+          onpress = {() => this.signInWithGoogleAsync()}
         />
       </View>
     );
